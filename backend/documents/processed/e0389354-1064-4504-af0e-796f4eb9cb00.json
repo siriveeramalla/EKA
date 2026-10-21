@@ -1,0 +1,15 @@
+{
+  "document_id": "e0389354-1064-4504-af0e-796f4eb9cb00",
+  "filename": "PROJ_API_Reference.pdf",
+  "file_type": "pdf",
+  "sections": [
+    {
+      "location": "Page 1",
+      "text": "PROJECT & OPERATIONAL KNOWLEDGE\nEnterprise Knowledge Assistant: REST API Reference &\nIntegration Guide\nEndpoint Schemas, JWT Auth, RAG Query Payload, Response Envelopes, and Health Checks\nInterface: OpenAPI 3.0 /\nREST\nVersion:\n1.4\nOwner: API Platform\nEngineering\nBase URL: https://\napi.knowledge.internal.apextech.com/v1\n1. Authentication and Base URLs\nThe Enterprise Knowledge Assistant API is exposed internally over HTTPS. All requests require authentication via an\nOkta-issued JSON Web Token (JWT) passed in the Authorization header:\nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\nBase URL: https://api.knowledge.internal.apextech.com/v1\n2. Core Query Endpoint: POST /v1/query\nSubmits a natural language question against the enterprise knowledge base, returning a grounded response with source\ncitations.\nRequest Payload\nPOST /v1/query HTTP/1.1\nContent-Type: application/json\n{\n  \"query\": \"Can a new employee work remotely during the first week?\",\n  \"collections\": [\"HR\", \"SECURITY\"],\n  \"top_k\": 3,\n  \"include_citations\": true\n}\nApex Global Technologies | Project & Operational Knowledge\nDoc Ref: PROJ-API-REF-2026\nInternal Project Architecture & Operational Knowledge Base\nPage 1 of 2"
+    },
+    {
+      "location": "Page 2",
+      "text": "Response Payload (HTTP 200 OK)\n{\n  \"status\": \"success\",\n  \"data\": {\n    \"query\": \"Can a new employee work remotely during the first week?\",\n    \"answer\": \"No. Under the Apex Remote and Hybrid Work Policy (HR-POL-RMT-2026), newly hired employees are \n    \"confidence_score\": 0.98,\n    \"citations\": [\n      {\n        \"document_name\": \"HR_Remote_Work_Policy.pdf\",\n        \"document_ref\": \"HR-POL-RMT-2026\",\n        \"section\": \"3. New Hire Remote Work Restriction\",\n        \"page_number\": 1,\n        \"score\": 0.962\n      },\n      {\n        \"document_name\": \"HR_Onboarding_Guide.pdf\",\n        \"document_ref\": \"HR-GDE-ONB-2026\",\n        \"section\": \"4. First-Week Day-by-Day Milestone Checklist\",\n        \"page_number\": 2,\n        \"score\": 0.914\n      }\n    ],\n    \"execution_time_ms\": 342\n  }\n}\n3. Document Management Endpoints Summary\nEndpoint\nMethod\nDescription\nStatus Codes\n/v1/documents\nGET\nList all ingested documents with\nmetadata\n200 OK\n/v1/documents/\nupload\nPOST\nUpload and queue document for\ningestion\n202 Accepted , 422 Unprocessable\n/v1/documents/\n{id}\nGET\nGet document ingestion status and\nchunk count\n200 OK , 404 Not Found\n/v1/documents/\n{id}\nDELETE\nPurge document and delete vector\nembeddings\n204 No Content , 404 Not Found\n/v1/health\nGET\nSystem health, pgvector, and LLM\nlatency status\n200 OK , 503 Unavailable\nApex Global Technologies | Project & Operational Knowledge\nDoc Ref: PROJ-API-REF-2026\nInternal Project Architecture & Operational Knowledge Base\nPage 2 of 2"
+    }
+  ]
+}

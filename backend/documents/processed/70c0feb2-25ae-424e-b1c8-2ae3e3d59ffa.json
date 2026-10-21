@@ -1,0 +1,15 @@
+{
+  "document_id": "70c0feb2-25ae-424e-b1c8-2ae3e3d59ffa",
+  "filename": "TECH_REST_API_Standards.pdf",
+  "file_type": "pdf",
+  "sections": [
+    {
+      "location": "Page 1",
+      "text": "TECHNICAL DOCUMENTATION & ENGINEERING STANDARDS\nEnterprise REST API Standards & Design Guidelines\nURI Schema Conventions, HTTP Verb Semantics, Error Envelopes, and Throttling\nStandard: RESTful / OpenAPI\n3.0\nVersion:\n4.1\nOwner: API Governance\nCouncil\nSource Reference: Django REST Framework\nDocs\n1. URI Structure and Resource Naming Conventions\nApex RESTful endpoints represent resources using plural, lowercase nouns. URIs must never contain actions or verbs:\nCorrect: GET /api/v1/documents (List documents)\nCorrect: POST /api/v1/documents (Create document)\nCorrect: GET /api/v1/documents/{id}/chunks (List chunks belonging to document)\nForbidden: POST /api/v1/getDocument or POST /api/v1/save-doc\n2. HTTP Method Semantics and Status Code Matrix\nMethod\nSemantics\nIdempotent?\nStandard HTTP Status Codes\nGET\nRetrieve resource\nYes\n200 OK , 404 Not Found\nPOST\nCreate resource\nNo\n201 Created , 400 Bad Request , 422\nUnprocessable\nPUT\nFull replacement\nYes\n200 OK , 400 Bad Request , 404 Not Found\nPATCH\nPartial update\nYes\n200 OK , 400 Bad Request , 404 Not Found\nDELETE\nRemove resource\nYes\n204 No Content , 404 Not Found\n3. Standard Error Envelope Schema\nAll 4xx and 5xx API error responses must adhere strictly to the standardized enterprise JSON envelope:\n{\n  \"status\": \"error\",\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": \"The submitted payload failed schema validation.\",\n    \"details\": [\n      {\n        \"field\": \"query\",\n        \"issue\": \"Field is required and cannot be null.\"\n      }\n    ]\n  },\n  \"timestamp\": \"2026-10-17T08:00:00Z\",\n  \"request_id\": \"req-98f2b34a-91dc-4a11\"\n}\n• \n• \n• \n• \nApex Global Technologies | Technical Documentation\nDoc Ref: TECH-STD-API-2026\nOfficial Technical Guidelines & Engineering Standards\nPage 1 of 2"
+    },
+    {
+      "location": "Page 2",
+      "text": "4. Pagination, Versioning, and Rate Limiting\nCursor-Based Pagination: Standard for real-time querying: /api/v1/query?limit=20&cursor=cD0yMDI2 .\nReturns next and previous cursor links.\nAPI Versioning: Explicit URI path versioning (e.g., /v1/ , /v2/ ). Deprecated versions are maintained for 12\nmonths with Deprecation and Sunset HTTP headers.\nThrottling: Enforce rate limiting returning standard headers: X-RateLimit-Limit: 1000 , X-RateLimit-\nRemaining: 842 , X-RateLimit-Reset: 1776412800 . Excess requests return 429 Too Many Requests .\n• \n• \n• \nApex Global Technologies | Technical Documentation\nDoc Ref: TECH-STD-API-2026\nOfficial Technical Guidelines & Engineering Standards\nPage 2 of 2"
+    }
+  ]
+}

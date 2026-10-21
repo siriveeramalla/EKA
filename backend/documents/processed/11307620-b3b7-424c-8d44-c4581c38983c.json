@@ -1,0 +1,15 @@
+{
+  "document_id": "11307620-b3b7-424c-8d44-c4581c38983c",
+  "filename": "SEC_Secure_Web_Application_Guide.pdf",
+  "file_type": "pdf",
+  "sections": [
+    {
+      "location": "Page 1",
+      "text": "IT & INFORMATION SECURITY POLICIES\nSecure Web Application Engineering & OWASP Defense\nGuide\nInjection Defense, XSS Mitigation, CSRF Protection, and Security Headers\nClassification: Internal\nVersion: 2.9\nOwner: Application Security (AppSec)\nStandard: OWASP Top 10 / Django Security\n1. Objective and OWASP Alignment\nThis technical guide establishes mandatory secure coding practices for all web applications and REST APIs developed at\nApex Global Technologies. Grounded in the OWASP Top 10 Web Application Security Risks and official Django\nSecurity Documentation, developers must implement these defensive controls in all application code.\n2. Core Defensive Controls & Implementation Patterns\n2.1 SQL Injection Prevention (OWASP A03)\nAlways utilize Django's Object-Relational Mapper (ORM), which automatically generates parameterized SQL queries.\nRaw SQL queries using string formatting are strictly prohibited:\n# SECURE: Django ORM automatically parameterizes inputs\nusers = EnterpriseUser.objects.filter(department=department_param, is_active=True)\n# FORBIDDEN: Highly vulnerable to SQL injection\n# cursor.execute(f\"SELECT * FROM users WHERE department = '{department_param}'\")\n2.2 Cross-Site Scripting (XSS) Mitigation (OWASP A03)\nDjango templates automatically escape all variables by default. Developers must never use the |safe template filter on\nuntrusted user-supplied data. In addition, applications must declare strict Content Security Policy (CSP) headers:\n# config/settings.py (via django-csp)\nCSP_DEFAULT_SRC = (\"'self'\",)\nCSP_SCRIPT_SRC = (\"'self'\", \"https://cdn.apextech.internal\")\nCSP_STYLE_SRC = (\"'self'\", \"'unsafe-inline'\")\nCSP_IMG_SRC = (\"'self'\", \"data:\", \"https://s3.amazonaws.com\")\n2.3 Cross-Site Request Forgery (CSRF) Hardening (OWASP A01)\nEnsure django.middleware.csrf.CsrfViewMiddleware is active in MIDDLEWARE . For REST APIs utilizing session\nauthentication, verify CSRF tokens via headers:\nCSRF_COOKIE_SECURE = True\nCSRF_COOKIE_HTTPONLY = True\nCSRF_COOKIE_SAMESITE = 'Strict'\nApex Global Technologies | IT & Information Security\nDoc Ref: SEC-GDE-APP-2026\nConfidential — Security Policy & Operational Standards\nPage 1 of 2"
+    },
+    {
+      "location": "Page 2",
+      "text": "2.4 Security HTTP Response Headers Checklist\n# config/settings.py\nSECURE_BROWSER_XSS_FILTER = True\nSECURE_CONTENT_TYPE_NOSNIFF = True\nX_FRAME_OPTIONS = 'DENY'\nSECURE_HSTS_SECONDS = 31536000  # 1 Year HSTS\nSECURE_HSTS_INCLUDE_SUBDOMAINS = True\nSECURE_HSTS_PRELOAD = True\nSECURE_SSL_REDIRECT = True  # Enforce HTTPS redirect\nApex Global Technologies | IT & Information Security\nDoc Ref: SEC-GDE-APP-2026\nConfidential — Security Policy & Operational Standards\nPage 2 of 2"
+    }
+  ]
+}
